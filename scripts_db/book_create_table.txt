@@ -1,0 +1,13 @@
+USE [DoacaoDeLivros]
+GO
+
+CREATE TABLE [dbo].[Book](
+	[id] [uniqueidentifier] NOT NULL,
+	[title] [nvarchar](max) NOT NULL,
+	[author] [nvarchar](max) NULL,
+	[sinopse] [nvarchar](max) NULL,
+	[cover] [nvarchar](max) NULL,
+	[createdAt] [datetime] NOT NULL,
+	[updatedAt] [datetime] NULL,
+	[createdBy] [uniqueidentifier] NOT NULL,
+)ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];

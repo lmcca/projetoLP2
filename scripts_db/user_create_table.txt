@@ -1,0 +1,12 @@
+USE [DoacaoDeLivros]
+GO
+
+CREATE TABLE [dbo].[User](
+	[id] [uniqueidentifier] NOT NULL,
+	[email] [nvarchar](max) NOT NULL,
+	[name] [nvarchar](max) NULL,
+	[password] [nvarchar](max) NULL,
+	[address] [nvarchar](max) NULL,
+	[createdAt] [datetime] NOT NULL,
+	[updatedAt] [datetime] NULL,
+)ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
