@@ -73,20 +73,20 @@ private Connection t = new TesteDB().call();
 		return fromToPurchase(statement.executeQuery());
 	}
 	
-	public ArrayList<Purchase> getAllPurchases() throws SQLException {
+	public ArrayList<Purchase> getAllPurchases(String purchasedId) throws SQLException {
 		ArrayList<Purchase> purchases = new ArrayList<Purchase>();
 		String sql = "SELECT [id]\r\n"
-				+ "           ,[title]\r\n"
-				+ "           ,[author]\r\n"
-				+ "           ,[sinopse]\r\n"
-				+ "           ,[cover]\r\n"
-				+ "           ,[lauchAt]\r\n"
+				+ "           ,[bookId]\r\n"
+				+ "           ,[purchasedId]\r\n"
 				+ "           ,[createdAt]\r\n"
 				+ "           ,[updatedAt]\r\n"
-				+ "           ,[createdBy])\r\n"
-				+ "  FROM [dbo].[Book]\r\n";
+				+ "  FROM [dbo].[Purchased]\r\n"
+				+ "  WHERE purchasedId=?\r\n";
 		
-		ResultSet rs = t.prepareStatement(sql).executeQuery();
+		PreparedStatement statement = t.prepareStatement(sql);
+		statement.setObject(1,purchasedId);
+		
+		ResultSet rs = statement.executeQuery();
 		
 		while(rs.next()) {
 			Purchase purchase = fromToPurchase(rs);

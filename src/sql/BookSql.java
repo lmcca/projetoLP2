@@ -15,7 +15,7 @@ import entities.User;
 public class BookSql {
 private Connection t = new TesteDB().call();
 	
-	public boolean createBookr(Book book) throws SQLException {
+	public boolean createBook(Book book) throws SQLException {
 		String sql = "INSERT INTO [dbo].[Book]\r\n"
 				+ "           ([id]\r\n"
 				+ "           ,[title]\r\n"
