@@ -1,8 +1,8 @@
 package models;
 
 import java.io.Serializable;
+
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import entities.User;
@@ -17,7 +17,7 @@ public class UserModel implements Serializable{
 	
 	public User createUser(String email, String name, String password, String address) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 	
-		User user = new User(UUID.randomUUID().toString(), email, name, password, address, LocalDate.now(), null);
+		User user = new User(UUID.randomUUID().toString(), email, name, password, address, LocalDateTime.now(), null);
 			
 		userSql.createUser(user);
 		

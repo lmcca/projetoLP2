@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[Book](
 	[author] [nvarchar](max) NULL,
 	[sinopse] [nvarchar](max) NULL,
 	[cover] [nvarchar](max) NULL,
+	[givenAway][nvarchar](max) NULL,
 	[lauchAt] [datetime] NOT NULL,
 	[createdAt] [datetime] NOT NULL,
 	[updatedAt] [datetime] NULL,

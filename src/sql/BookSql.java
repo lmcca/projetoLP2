@@ -29,6 +29,7 @@ public class BookSql implements Serializable{
 				+ "           ,[author]\r\n"
 				+ "           ,[sinopse]\r\n"
 				+ "           ,[cover]\r\n"
+				+ "           ,[givenAway]\r\n"
 				+ "           ,[lauchAt]\r\n"
 				+ "           ,[createdAt]\r\n"
 				+ "           ,[updatedAt]\r\n"
@@ -41,55 +42,65 @@ public class BookSql implements Serializable{
 				+ "           ,?\r\n"
 				+ "           ,?\r\n"
 				+ "           ,?\r\n"
-				+ "           ,null\r\n"
+				+ "           ,?\r\n"
+				+ "           ,?\r\n"
 				+ "           ,?)";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
-
+		
+		String givenAway = null;
+		if(book.isGivenAway()) {
+			givenAway = "1";
+		}else {
+			givenAway = "0";
+		}
+		
 		statement.setObject(1, book.getId());
 		statement.setObject(2, book.getTitle());
 		statement.setObject(3, book.getAuthor());
 		statement.setObject(4, book.getSinopse());
 		statement.setObject(5, book.getCover());
-		statement.setObject(6, Timestamp.valueOf(book.getCreatedAt()));
+		statement.setObject(6, givenAway);
 		statement.setObject(7, Timestamp.valueOf(book.getCreatedAt()));
-		//statement.setObject(8, null);
-		statement.setObject(8, book.getCreatedBy().getId());
+		statement.setObject(8, Timestamp.valueOf(book.getCreatedAt()));
+		statement.setObject(9, book.getUpdatedAt());
+		statement.setObject(10, book.getCreatedBy().getId());
 		
 		return !statement.execute();
 	}
 	
 	private Book fromToBook(ResultSet rs) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Book book = null;
-		while(rs.next()) {
+
 			UserSql userSql = new UserSql();
 			String id = rs.getString(1);
 			String title = rs.getString(2);
 			String author = rs.getString(3);
 			String sinopse = rs.getString(4);
 			String cover = rs.getString(5);
-			User createdBy = userSql.getUserById(rs.getString(9));
+			boolean givenAway = rs.getString(6) == "1";
+			User createdBy = userSql.getUserById(rs.getString(10));
 
 			
-			LocalDate d = LocalDate.parse(rs.getString(6).split(" ")[0]);
-			LocalTime l = LocalTime.parse(rs.getString(6).split(" ")[1]);
+			LocalDate d = LocalDate.parse(rs.getString(7).split(" ")[0]);
+			LocalTime l = LocalTime.parse(rs.getString(7).split(" ")[1]);
 			LocalDateTime lauchAt = LocalDateTime.of(d, l);
 			
-			d = LocalDate.parse(rs.getString(7).split(" ")[0]);
-			l = LocalTime.parse(rs.getString(7).split(" ")[1]);
+			d = LocalDate.parse(rs.getString(8).split(" ")[0]);
+			l = LocalTime.parse(rs.getString(8).split(" ")[1]);
 			
 			LocalDateTime createdAt= LocalDateTime.of(d,l);
 			LocalDateTime updatedAt = null;
 						
-			if (rs.getString(8) != null){
-				d = LocalDate.parse(rs.getString(8).split(" ")[0]);
-				l = LocalTime.parse(rs.getString(8).split(" ")[1]);
+			if (rs.getString(9) != null){
+				d = LocalDate.parse(rs.getString(9).split(" ")[0]);
+				l = LocalTime.parse(rs.getString(9).split(" ")[1]);
 				updatedAt = LocalDateTime.of(d,l);
 			}
 			
-			 book = new Book(id, title, author, sinopse, cover, lauchAt, createdAt, updatedAt, createdBy);
+			 book = new Book(id, title, author, sinopse, cover, givenAway, lauchAt, createdAt, updatedAt, createdBy);
 			
-		}return book;
+		return book;
 	}
 	
 	public Book getBookById(String bookId) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -99,6 +110,7 @@ public class BookSql implements Serializable{
 				+ "           ,[author]\r\n"
 				+ "           ,[sinopse]\r\n"
 				+ "           ,[cover]\r\n"
+				+ "           ,[givenAway]\r\n"
 				+ "           ,[lauchAt]\r\n"
 				+ "           ,[createdAt]\r\n"
 				+ "           ,[updatedAt]\r\n"
@@ -120,10 +132,11 @@ public class BookSql implements Serializable{
 				+ "           ,[author]\r\n"
 				+ "           ,[sinopse]\r\n"
 				+ "           ,[cover]\r\n"
+				+ "           ,[givenAway]\r\n"
 				+ "           ,[lauchAt]\r\n"
 				+ "           ,[createdAt]\r\n"
 				+ "           ,[updatedAt]\r\n"
-				+ "           ,[createdBy])\r\n"
+				+ "           ,[createdBy]\r\n"
 				+ "  FROM [dbo].[Book]\r\n"
 				+ "  WHERE title=?";
 		
@@ -149,35 +162,20 @@ public class BookSql implements Serializable{
 				+ "           ,[author]\r\n"
 				+ "           ,[sinopse]\r\n"
 				+ "           ,[cover]\r\n"
+				+ "           ,[givenAway]\r\n"
 				+ "           ,[lauchAt]\r\n"
 				+ "           ,[createdAt]\r\n"
 				+ "           ,[updatedAt]\r\n"
-				+ "           ,[createdBy])\r\n"
+				+ "           ,[createdBy]\r\n"
 				+ "  FROM [dbo].[Book]\r\n";
 		
 		ResultSet rs = connection.prepareStatement(sql).executeQuery();
 		
 		while(rs.next()) {
-			UserSql userSql = new UserSql();
-			String id = rs.getString(1);
-			String title = rs.getString(2);
-			String author = rs.getString(3);
-			String sinopse = rs.getString(4);
-			String cover = rs.getString(5);
-			LocalDateTime lauchAt = LocalDateTime.parse(rs.getString(6).split(" ")[0]);
-			LocalDateTime createdAt= LocalDateTime.parse(rs.getString(7).split(" ")[0]);
-			LocalDateTime updatedAt = null;
-			User createdBy = userSql.getUserById(rs.getString(9));
-			
-			if (rs.getString(8) != null){
-				updatedAt = LocalDateTime.parse(rs.getString(8).split(" ")[0]);
-			}
-			
-			Book book = new Book(id, title, author, sinopse, cover, lauchAt, createdAt, updatedAt, createdBy);
-			books.add(book);
-			
+			Book book = fromToBook(rs);
+			if(book!= null) books.add(book);
 		}
-		
+		System.out.println(books);
 		return books;
 	}
 
@@ -189,19 +187,26 @@ public class BookSql implements Serializable{
 				+ "           ,[author]=?\r\n"
 				+ "           ,[sinopse]=?\r\n"
 				+ "           ,[cover]=?\r\n"
+				+ "           ,[givenAway]=?\r\n"
 				+ "           ,[lauchAt]=?\r\n"
 				+ "           ,[updatedAt]=?\r\n"
 				+ "WHERE id=?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
-		
+		String givenAway = null;
+		if(book.isGivenAway()) {
+			givenAway = "1";
+		}else {
+			givenAway = "0";
+		}
 		statement.setObject(1, book.getTitle());
 		statement.setObject(2, book.getAuthor());
 		statement.setObject(3, book.getSinopse());
 		statement.setObject(4, book.getCover());
-		statement.setObject(5, book.getDateLauch());
-		statement.setObject(6, book.getUpdatedAt());
-		statement.setObject(7, book.getId());
+		statement.setObject(5, givenAway);
+		statement.setObject(6, book.getDateLauch());
+		statement.setObject(7, book.getUpdatedAt());
+		statement.setObject(8, book.getId());
 		return !statement.execute();
 	
 	}

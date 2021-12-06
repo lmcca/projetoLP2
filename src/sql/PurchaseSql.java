@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import entities.Book;
@@ -52,11 +54,17 @@ public class PurchaseSql implements Serializable{
 		String id = rs.getString(1);
 		Book book = bookSql.getBookById(rs.getString(2));
 		User purchased = userSql.getUserById(rs.getString(3));
-		LocalDateTime createdAt= LocalDateTime.parse(rs.getString(4).split(" ")[0]);
-		LocalDateTime updatedAt = null;
 		
+		LocalDate d = LocalDate.parse(rs.getString(4).split(" ")[0]);
+		LocalTime l = LocalTime.parse(rs.getString(4).split(" ")[1]);
+		
+		LocalDateTime createdAt= LocalDateTime.of(d,l);
+		LocalDateTime updatedAt = null;
+					
 		if (rs.getString(5) != null){
-			updatedAt = LocalDateTime.parse(rs.getString(5).split(" ")[0]);
+			d = LocalDate.parse(rs.getString(5).split(" ")[0]);
+			l = LocalTime.parse(rs.getString(5).split(" ")[1]);
+			updatedAt = LocalDateTime.of(d,l);
 		}
 		
 		Purchase purchase = new Purchase(id, book, purchased, createdAt, updatedAt);

@@ -9,12 +9,13 @@ public class Book {
 	private String author;
 	private String sinopse;
 	private String cover;
+	private boolean givenAway;
 	private User createdBy;
 	private LocalDateTime dateLauch;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	
-	public Book(String id, String title, String author, String sinopse, String cover, LocalDateTime dateLauch,LocalDateTime createdAt, LocalDateTime updatedAt, User createdBy) {
+	public Book(String id, String title, String author, String sinopse, String cover, boolean givenAway, LocalDateTime dateLauch,LocalDateTime createdAt, LocalDateTime updatedAt, User createdBy) {
 		setId(id);
 		setTitle(title);
 		setAuthor(author);
@@ -100,6 +101,12 @@ public class Book {
 	@Override
 	public String toString() {
 		return "Titulo: " + this.title + "\nAutor: " + this.author + "\nSinopse: " + this.sinopse;
+	}
+	public boolean isGivenAway() {
+		return givenAway;
+	}
+	public void setGivenAway(boolean givenAway) {
+		this.givenAway = givenAway;
 	}
 
 }

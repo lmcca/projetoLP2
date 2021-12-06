@@ -1,14 +1,14 @@
 package sql;
 
 import java.io.Serializable;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import entities.TesteDB;
@@ -70,18 +70,7 @@ public class UserSql implements Serializable{
 		ResultSet rs = statement.executeQuery();
 		
 		while(rs.next()) {
-			String id = rs.getString(1);
-			String email = rs.getString(2);
-			String name = rs.getString(3);
-			String address = rs.getString(5);
-			LocalDate createdAt= LocalDate.parse(rs.getString(6).split(" ")[0]);
-			LocalDate updatedAt = null;
-			
-			if (rs.getString(7) != null){
-				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]);
-			}
-			
-			 user = new User(id, null, email, name, address, createdAt, updatedAt);
+			user = fromToUser(rs);
 			
 			
 		}
@@ -106,23 +95,9 @@ public class UserSql implements Serializable{
 		statement.setObject(1, userId);
 		
 		ResultSet rs = statement.executeQuery();
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:nn:ss");
+
 		while(rs.next()) {
-			String id = rs.getString(1);
-			String email = rs.getString(2);
-			String name = rs.getString(3);
-			String address = rs.getString(5);
-			System.out.println(rs.getString(6));
-			LocalDate createdAt = LocalDate.parse(rs.getString(6).split(" ")[0]) ;
-			LocalDate updatedAt = null;
-			
-			if (rs.getString(7) != null){
-				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]) ;
-			}
-			
-			 user = new User(id, null, email, name, address, createdAt, updatedAt);
-			
-			
+			user = fromToUser(rs);
 		}
 		
 		return user;
@@ -142,23 +117,13 @@ public class UserSql implements Serializable{
 				+ "GO";
 		
 		ResultSet rs = connection.prepareStatement(sql).executeQuery();
-		
 		while(rs.next()) {
-			String id = rs.getString(1);
-			String email = rs.getString(2);
-			String name = rs.getString(3);
-			String address = rs.getString(5);
-			LocalDate createdAt= LocalDate.parse(rs.getString(6).split(" ")[0]);
-			LocalDate updatedAt = null;
-			
-			if (rs.getString(7) != null){
-				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]);
+			User user = fromToUser(rs);
+			if(user!=null) {
+				users.add(user);
 			}
-			
-			User user = new User(id, null, email, name, address, createdAt, updatedAt);
-			users.add(user);
-			
 		}
+		
 		
 		return users;
 	}
@@ -191,6 +156,32 @@ public class UserSql implements Serializable{
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, id);
 		return !statement.execute();
+	}
+	
+	public User fromToUser(ResultSet rs) throws SQLException {
+		User user = null;
+		
+			String id = rs.getString(1);
+			String email = rs.getString(2);
+			String name = rs.getString(3);
+			String address = rs.getString(5);
+			
+			LocalDate d = LocalDate.parse(rs.getString(4).split(" ")[0]);
+			LocalTime l = LocalTime.parse(rs.getString(4).split(" ")[1]);
+			
+			LocalDateTime createdAt= LocalDateTime.of(d,l);
+			LocalDateTime updatedAt = null;
+						
+			if (rs.getString(5) != null){
+				d = LocalDate.parse(rs.getString(5).split(" ")[0]);
+				l = LocalTime.parse(rs.getString(5).split(" ")[1]);
+				updatedAt = LocalDateTime.of(d,l);
+			}
+			
+			 user = new User(id, null, email, name, address, createdAt, updatedAt);
+		
+		
+		return user;
 	}
 
 }

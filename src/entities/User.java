@@ -1,7 +1,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class User implements Serializable{
@@ -15,10 +14,10 @@ public class User implements Serializable{
 	private String name;
 	private String password; 
 	private String address;
-	private LocalDate createdAt;
-	private LocalDate updatedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 	
-	public User(String id, String password, String email, String name, String address, LocalDate createdAt, LocalDate updatedAt) {
+	public User(String id, String password, String email, String name, String address, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		setId(id);
 		setPassword(password);
 		setEmail(email);
@@ -60,19 +59,19 @@ public class User implements Serializable{
 		this.address = address;
 	}
 	
-	public LocalDate getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 	
-	public void setCreatedAt(LocalDate createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 	
-	public LocalDate getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public void setUpdatedAt(LocalDate updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	

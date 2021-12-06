@@ -1,11 +1,9 @@
 package servidor;
 
 import java.io.ObjectInputStream;
-import java.net.Socket;
-import java.time.LocalDateTime;
 
-import entities.Book;
-import entities.User;
+import java.net.Socket;
+import frontend.GUI;
 import models.BookModel;
 import models.PurchaseModel;
 import models.UserModel;
@@ -23,15 +21,11 @@ public class Cliente {
 	      BookModel bookModel = (BookModel)entrada.readObject();
 	      PurchaseModel purchaseModel = (PurchaseModel)entrada.readObject();
 	      
-	      //User user = userModel.createUser("testederrota@teste.com", "derrota", "123456", "58033460");
-	      User user = userModel.getUserById("C3C6E891-56C2-4E97-BBB2-2944B492E3B8");
-	      Book book =  bookModel.getBookById("D9CCEFCA-C211-4143-93CF-5584590877D8");
-	      
-	      System.out.println(book.toString());
+	      new GUI(bookModel, userModel,purchaseModel);  
 	      
 	      entrada.close();
 	      
-	      System.out.println("Conexão encerrada");
+	      System.out.println("Conexco encerrada");
 	    }
 	    catch(Exception e) {
 	      System.out.println(e.getMessage());

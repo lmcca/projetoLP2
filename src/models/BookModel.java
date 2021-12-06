@@ -20,7 +20,7 @@ public class BookModel implements Serializable{
 	public Book createBook(String title, String author, String sinopse, String cover, LocalDateTime dateLauch, User createdBy) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Book book = null;
 		try {
-			book = new Book(UUID.randomUUID().toString(), title, author, sinopse, cover, dateLauch, LocalDateTime.now(), null,createdBy );
+			book = new Book(UUID.randomUUID().toString(), title, author, sinopse, cover,false, dateLauch, LocalDateTime.now(), null,createdBy);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,6 +40,7 @@ public class BookModel implements Serializable{
 	}
 	
 	public ArrayList<Book> getAllBooks() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		System.out.println("aaaaaaaaaaah entrei");
 		return bookSql.getAllBooks();
 	}
 	
