@@ -96,5 +96,10 @@ public class Book {
 	public void setSinopse(String sinopse) {
 		this.sinopse = sinopse;
 	}
+	
+	@Override
+	public String toString() {
+		return "Titulo: " + this.title + "\nAutor: " + this.author + "\nSinopse: " + this.sinopse;
+	}
 
 }

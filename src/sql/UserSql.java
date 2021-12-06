@@ -1,20 +1,27 @@
 package sql;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import entities.TesteDB;
 import entities.User;
 
-public class UserSql {
-	private Connection t = new TesteDB().call();
+public class UserSql implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	public boolean createUser(User user) throws SQLException {
+	public boolean createUser(User user) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		String sql = "INSERT INTO [dbo].[User]\r\n"
 				+ "           ([id]\r\n"
 				+ "           ,[email]\r\n"
@@ -32,19 +39,20 @@ public class UserSql {
 				+ "           ?,\r\n"
 				+ "           ?)";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, user.getId());
 		statement.setObject(2, user.getEmail());
 		statement.setObject(3, user.getName());
 		statement.setObject(4, user.getPassword());
 		statement.setObject(5, user.getAddress());
-		statement.setObject(6, Timestamp.valueOf(user.getCreatedAt()));
+		statement.setObject(6, user.getCreatedAt());
 		statement.setObject(7, null);
 		
 		return !statement.execute();
 	}
 	
-	public User getUserByEmail(String emailUser) throws SQLException {
+	public User getUserByEmail(String emailUser) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		User user = null;
 		String sql = "SELECT [id]\r\n"
 				+ "      ,[email]\r\n"
@@ -56,7 +64,7 @@ public class UserSql {
 				+ "  FROM [dbo].[User]\r\n"
 				+ "  WHERE email=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, emailUser);
 		
 		ResultSet rs = statement.executeQuery();
@@ -66,11 +74,11 @@ public class UserSql {
 			String email = rs.getString(2);
 			String name = rs.getString(3);
 			String address = rs.getString(5);
-			LocalDateTime createdAt= LocalDateTime.parse(rs.getString(6).split(" ")[0]);
-			LocalDateTime updatedAt = null;
+			LocalDate createdAt= LocalDate.parse(rs.getString(6).split(" ")[0]);
+			LocalDate updatedAt = null;
 			
 			if (rs.getString(7) != null){
-				updatedAt = LocalDateTime.parse(rs.getString(7).split(" ")[0]);
+				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]);
 			}
 			
 			 user = new User(id, null, email, name, address, createdAt, updatedAt);
@@ -81,7 +89,8 @@ public class UserSql {
 		return user;
 	}
 	
-	public User getUserById(String userId) throws SQLException {
+	public User getUserById(String userId) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		User user = null;
 		String sql = "SELECT [id]\r\n"
 				+ "      ,[email]\r\n"
@@ -93,21 +102,22 @@ public class UserSql {
 				+ "  FROM [dbo].[User]\r\n"
 				+ "  WHERE id=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, userId);
 		
 		ResultSet rs = statement.executeQuery();
-		
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:nn:ss");
 		while(rs.next()) {
 			String id = rs.getString(1);
 			String email = rs.getString(2);
 			String name = rs.getString(3);
 			String address = rs.getString(5);
-			LocalDateTime createdAt= LocalDateTime.parse(rs.getString(6).split(" ")[0]);
-			LocalDateTime updatedAt = null;
+			System.out.println(rs.getString(6));
+			LocalDate createdAt = LocalDate.parse(rs.getString(6).split(" ")[0]) ;
+			LocalDate updatedAt = null;
 			
 			if (rs.getString(7) != null){
-				updatedAt = LocalDateTime.parse(rs.getString(7).split(" ")[0]);
+				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]) ;
 			}
 			
 			 user = new User(id, null, email, name, address, createdAt, updatedAt);
@@ -118,7 +128,8 @@ public class UserSql {
 		return user;
 	}
 	
-	public ArrayList<User> getAllUsers() throws SQLException {
+	public ArrayList<User> getAllUsers() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		ArrayList<User> users = new ArrayList<User>();
 		String sql = "SELECT [id]\r\n"
 				+ "      ,[email]\r\n"
@@ -130,18 +141,18 @@ public class UserSql {
 				+ "  FROM [dbo].[User]\r\n"
 				+ "GO";
 		
-		ResultSet rs = t.prepareStatement(sql).executeQuery();
+		ResultSet rs = connection.prepareStatement(sql).executeQuery();
 		
 		while(rs.next()) {
 			String id = rs.getString(1);
 			String email = rs.getString(2);
 			String name = rs.getString(3);
 			String address = rs.getString(5);
-			LocalDateTime createdAt= LocalDateTime.parse(rs.getString(6).split(" ")[0]);
-			LocalDateTime updatedAt = null;
+			LocalDate createdAt= LocalDate.parse(rs.getString(6).split(" ")[0]);
+			LocalDate updatedAt = null;
 			
 			if (rs.getString(7) != null){
-				updatedAt = LocalDateTime.parse(rs.getString(7).split(" ")[0]);
+				updatedAt = LocalDate.parse(rs.getString(7).split(" ")[0]);
 			}
 			
 			User user = new User(id, null, email, name, address, createdAt, updatedAt);
@@ -153,7 +164,8 @@ public class UserSql {
 	}
 
 	
-	public boolean updateUser(User user) throws SQLException {
+	public boolean updateUser(User user) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		String sql = "UPDATE [dbo].[User]\r\n"
 				+ "   SET [email] =?\r\n"
 				+ "      ,[name] =?\r\n"
@@ -161,7 +173,7 @@ public class UserSql {
 				+"		 ,[updatedAt] =?\r\n"
 				+ " WHERE id=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, user.getEmail());
 		statement.setObject(2, user.getName());
 		statement.setObject(3, user.getAddress());
@@ -171,11 +183,12 @@ public class UserSql {
 	
 	}
 	
-	public boolean deleteUser(String id) throws SQLException {
+	public boolean deleteUser(String id) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		String sql = "DELETE FROM [dbo].[User]\r\n"
 				+ "WHERE id=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, id);
 		return !statement.execute();
 	}

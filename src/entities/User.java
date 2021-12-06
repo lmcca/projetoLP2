@@ -1,17 +1,24 @@
 package entities;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String id;
 	private String email;
 	private String name;
 	private String password; 
 	private String address;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	private LocalDate createdAt;
+	private LocalDate updatedAt;
 	
-	public User(String id, String password, String email, String name, String address, LocalDateTime createdAt, LocalDateTime updatedAt) {
+	public User(String id, String password, String email, String name, String address, LocalDate createdAt, LocalDate updatedAt) {
 		setId(id);
 		setPassword(password);
 		setEmail(email);
@@ -53,19 +60,19 @@ public class User {
 		this.address = address;
 	}
 	
-	public LocalDateTime getCreatedAt() {
+	public LocalDate getCreatedAt() {
 		return createdAt;
 	}
 	
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(LocalDate createdAt) {
 		this.createdAt = createdAt;
 	}
 	
-	public LocalDateTime getUpdatedAt() {
+	public LocalDate getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public void setUpdatedAt(LocalDateTime updatedAt) {
+	public void setUpdatedAt(LocalDate updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	

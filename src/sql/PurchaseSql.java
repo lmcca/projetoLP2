@@ -1,5 +1,6 @@
 package sql;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +14,14 @@ import entities.Purchase;
 import entities.TesteDB;
 import entities.User;
 
-public class PurchaseSql {
-private Connection t = new TesteDB().call();
-	
-	public boolean createPurchase(Purchase purchase) throws SQLException {
+public class PurchaseSql implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public boolean createPurchase(Purchase purchase) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
 		String sql = "INSERT INTO [dbo].[Purchase]\r\n"
 				+ "           ([id]\r\n"
 				+ "           ,[book]\r\n"
@@ -30,7 +35,7 @@ private Connection t = new TesteDB().call();
 				+ "           ,?\r\n"
 				+ "           ,null\r\n)";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, purchase.getId());
 		statement.setObject(2, purchase.getBook().getId());
 		statement.setObject(6, purchase.getPurchased().getId());
@@ -40,7 +45,7 @@ private Connection t = new TesteDB().call();
 		return !statement.execute();
 	}
 	
-	private Purchase fromToPurchase(ResultSet rs) throws SQLException {
+	private Purchase fromToPurchase(ResultSet rs) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		UserSql userSql = new UserSql();
 		BookSql bookSql = new BookSql();
 		
@@ -58,7 +63,9 @@ private Connection t = new TesteDB().call();
 		return purchase;
 	}
 	
-	public Purchase getPurchaseById(String purchaseId) throws SQLException {
+	public Purchase getPurchaseById(String purchaseId) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
+		
 		String sql = "SELECT [id]\r\n"
 				+ "           ,[book]\r\n"
 				+ "           ,[purchased]\r\n"
@@ -67,13 +74,15 @@ private Connection t = new TesteDB().call();
 				+ "  FROM [dbo].[Purchase]\r\n"
 				+ "  WHERE id=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, purchaseId);
 		
 		return fromToPurchase(statement.executeQuery());
 	}
 	
-	public ArrayList<Purchase> getAllPurchases(String purchasedId) throws SQLException {
+	public ArrayList<Purchase> getAllPurchases(String purchasedId) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
+		
 		ArrayList<Purchase> purchases = new ArrayList<Purchase>();
 		String sql = "SELECT [id]\r\n"
 				+ "           ,[bookId]\r\n"
@@ -83,7 +92,7 @@ private Connection t = new TesteDB().call();
 				+ "  FROM [dbo].[Purchased]\r\n"
 				+ "  WHERE purchasedId=?\r\n";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1,purchasedId);
 		
 		ResultSet rs = statement.executeQuery();
@@ -100,11 +109,13 @@ private Connection t = new TesteDB().call();
 		return purchases;
 	}
 	
-	public boolean deletePurchase(String id) throws SQLException {
+	public boolean deletePurchase(String id) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		Connection connection = new TesteDB().call(); 
+		
 		String sql = "DELETE FROM [dbo].[Purchase]\r\n"
 				+ "WHERE id=?";
 		
-		PreparedStatement statement = t.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, id);
 		return !statement.execute();
 	}

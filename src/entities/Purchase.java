@@ -1,8 +1,13 @@
 package entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Purchase {
+public class Purchase implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private Book book;
 	private User purchased;
