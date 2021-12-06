@@ -1,0 +1,11 @@
+USE [DoacaoDeLivros]
+GO
+
+CREATE TABLE [dbo].[Purchase](
+	[id] [uniqueidentifier] NOT NULL,
+	[bookId] [uniqueidentifier] NOT NULL,
+	[purchasedBy] [uniqueidentifier] NOT NULL,
+	[createdAt] [datetime] NOT NULL,
+	[updatedAt] [datetime] NULL,
+	
+)ON [PRIMARY];
