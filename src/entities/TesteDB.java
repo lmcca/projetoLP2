@@ -21,7 +21,7 @@ public class TesteDB implements Serializable{
 		                       ";user=" + usuario + ";password=" + senha + ";";
 		
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		    conexao = DriverManager.getConnection(url);
 		} catch (ClassNotFoundException e) {
 		    // Erro caso o driver JDBC não foi instalado
