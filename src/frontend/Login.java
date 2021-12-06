@@ -17,11 +17,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
-import entities.Book;
-import entities.User;
 import models.BookModel;
 
 public class Login extends JFrame implements ActionListener{
@@ -35,10 +30,10 @@ public class Login extends JFrame implements ActionListener{
 	      JButton meuLiv;
 	      JButton suaArea;
 	private BookController bookController;
-	
-	
+
           Login(BookModel bookModel){
         	  this.bookController = new BookController(bookModel);
+
         	  ImageIcon logo = new ImageIcon("logo.png");
         	  ImageIcon pesIcon =  new ImageIcon("searchIcon.png");
         	  
