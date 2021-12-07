@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import controllers.BookController;
 import controllers.PurchaseController;
 import entities.Book;
+import entities.Purchase;
 import entities.User;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,45 +30,40 @@ public class Home extends JFrame implements ActionListener {
 	/**
 	* 
 	*/
-	JPanel panel5, panel3, panel4;
+	JPanel panel5, panel3, panel4, panel6;
 	JPanel sub51;
 	JPanel sub511;
 	JPanel sub513;
+	JPanel subMinhasPegas;
 	private static final long serialVersionUID = 1L;
 	JTextField pesquisa;
 	JButton seuInfo;
 	JButton meuLiv;
 	JButton criaLivro;
 	JButton suaArea;
+	JButton minhasPegas;
 	JPanel sub512;
+	JButton excluirLivro;
+
 	private BookController bookController;
 	private PurchaseController purchaseController;
 	private User userE;
-
+	private ArrayList<Book> livrosMeuCep=new ArrayList<Book>();;
+	private ArrayList<Book> meusLivros = new ArrayList<Book>();
+	private ArrayList<Purchase> purchases = new ArrayList<Purchase>();
+	
 	Home(BookModel bookModel, User userE, PurchaseModel purchaseModel) {
 		this.userE = userE;
 		this.bookController = new BookController(bookModel);
 		this.purchaseController = new PurchaseController(purchaseModel);
-		
-		ArrayList<Book> livrosMeuCep = new ArrayList<Book>();
-		try {
-			livrosMeuCep = bookController.getBooks();
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ArrayList<Book> meusLivros = new ArrayList<Book>();;
-		try {
-			meusLivros = bookController.getBooks();
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		ImageIcon dados = new ImageIcon("livroLogin.png");
+		updateMyBooks();
+		updateBooksByCep();
+		updatePurchases();
+
 		ImageIcon logo = new ImageIcon("logo.png");
 		ImageIcon pesIcon = new ImageIcon("searchIcon.png");
-
+		
 		JLabel user = new JLabel();
 		user.setText("     Projeto De Linguagem de Programação II");
 		user.setFont(new Font("Serif", Font.PLAIN, 15));
@@ -89,6 +85,13 @@ public class Home extends JFrame implements ActionListener {
 		dadosLoc.setText("Localizacão:" + this.userE.getAddress());
 		dadosLoc.setFont(new Font("Serif", Font.PLAIN, 30));
 
+		excluirLivro = new JButton();
+		excluirLivro.setText("Excluir livro");
+		excluirLivro.addActionListener(this);
+		excluirLivro.setFont(new Font("Serif", Font.PLAIN, 10));
+		excluirLivro.setFocusable(false);
+		excluirLivro.setBounds(0, 0, 10, 20);
+
 		criaLivro = new JButton();
 		criaLivro.setText("Adicionar livro");
 		criaLivro.addActionListener(this);
@@ -103,6 +106,14 @@ public class Home extends JFrame implements ActionListener {
 		seuInfo.addActionListener(this);
 		seuInfo.setFocusable(false);
 		seuInfo.setBackground(new Color(156, 136, 82));
+
+		minhasPegas = new JButton();
+		minhasPegas.setText("Minhas Pegas");
+		minhasPegas.setFont(new Font("Serif", Font.PLAIN, 20));
+		minhasPegas.setBounds(0, 0, 100, 50);
+		minhasPegas.addActionListener(this);
+		minhasPegas.setFocusable(false);
+		minhasPegas.setBackground(new Color(227, 223, 182));
 
 		meuLiv = new JButton();
 		meuLiv.setText("Meus Livros");
@@ -168,6 +179,7 @@ public class Home extends JFrame implements ActionListener {
 		panel2.add(seuInfo);
 		panel2.add(suaArea);
 		panel2.add(meuLiv);
+		panel2.add(minhasPegas);
 
 		panel3 = new JPanel();
 		panel3.setLayout(new GridLayout(3, 2, 5, 5));
@@ -175,7 +187,9 @@ public class Home extends JFrame implements ActionListener {
 		panel3.setPreferredSize(new Dimension(100, 100));
 		for(int i = 0; i < meusLivros.size(); i++){
 			Book book = meusLivros.get(i);
-			panel3.add(new Livro(book.getTitle(), book.getSinopse(), book.getAuthor(), book.getCreatedBy().getAddress()));
+			System.out.println(book.getCreatedBy().getId());
+			System.out.println(this.userE.getId());
+			panel3.add(new Livro(book.getTitle(), book.getSinopse(), book.getAuthor(), book.getCreatedBy().getAddress(), book.getCreatedBy().getEmail(), book.getCreatedBy().getId().equals(this.userE.getId()), book.getId(), this.bookController, this.purchaseController, this.userE));
 		}
 		panel3.add(criaLivro);
 
@@ -186,7 +200,17 @@ public class Home extends JFrame implements ActionListener {
 
 		for(int i = 0; i < livrosMeuCep.size(); i++){
 			Book book = livrosMeuCep.get(i);
-			panel4.add(new Livro(book.getTitle(), book.getSinopse(), book.getAuthor(), book.getCreatedBy().getAddress()));
+			panel4.add(new Livro(book.getTitle(), book.getSinopse(), book.getAuthor(), book.getCreatedBy().getAddress(), book.getCreatedBy().getEmail(), book.getCreatedBy().getId().equals(this.userE.getId()), book.getId(), this.bookController, this.purchaseController, this.userE));
+		}
+
+		panel6 = new JPanel();
+		panel6.setLayout(new GridLayout(3, 2, 5, 5));
+		panel6.setBackground(new Color(0, 168, 150));
+		panel6.setPreferredSize(new Dimension(100, 100));
+
+		for(int i = 0; i < purchases.size(); i++){
+			Purchase purchase = purchases.get(i);
+			panel6.add(new MinhasPegas(purchase.getBook().getTitle(), purchase.getPurchased().getAddress(), purchase.getPurchased().getEmail()));
 		}
 		
 
@@ -209,6 +233,33 @@ public class Home extends JFrame implements ActionListener {
 
 	}
 
+	private void updateBooksByCep(){
+		try {
+			livrosMeuCep = bookController.getBooksByCep(this.userE.getAddress());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void updatePurchases(){
+		try {
+			purchases = purchaseController.getPurchase(userE.getId());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void updateMyBooks(){
+		try {
+			meusLivros = bookController.getBooksByUser(this.userE.getId());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		/*
@@ -222,7 +273,20 @@ public class Home extends JFrame implements ActionListener {
 		 */
 		if (e.getSource() == criaLivro) {
 			new AddLiv(this.bookController, this.userE);
+			this.revalidate();
+			this.repaint();
+		}
 
+		if (e.getSource() == minhasPegas) {
+			suaArea.setBackground(new Color(227, 223, 182));
+			meuLiv.setBackground(new Color(227, 223, 182));
+			seuInfo.setBackground(new Color(227, 223, 182));
+			minhasPegas.setBackground(new Color(156, 136, 82));
+
+			this.getContentPane().remove(panel3);
+			this.getContentPane().remove(panel4);
+			this.getContentPane().remove(panel5);
+			this.add(panel6);
 			this.revalidate();
 			this.repaint();
 		}
@@ -230,9 +294,12 @@ public class Home extends JFrame implements ActionListener {
 		if (e.getSource() == seuInfo) {
 			suaArea.setBackground(new Color(227, 223, 182));
 			meuLiv.setBackground(new Color(227, 223, 182));
+			minhasPegas.setBackground(new Color(227, 223, 182));
 			seuInfo.setBackground(new Color(156, 136, 82));
+
 			this.getContentPane().remove(panel3);
 			this.getContentPane().remove(panel4);
+			this.getContentPane().remove(panel6);
 			this.add(panel5);
 			this.revalidate();
 			this.repaint();
@@ -241,21 +308,32 @@ public class Home extends JFrame implements ActionListener {
 
 			suaArea.setBackground(new Color(227, 223, 182));
 			seuInfo.setBackground(new Color(227, 223, 182));
+			minhasPegas.setBackground(new Color(227, 223, 182));
 			meuLiv.setBackground(new Color(156, 136, 82));
 			this.getContentPane().remove(panel5);
 			this.getContentPane().remove(panel4);
+			this.getContentPane().remove(panel6);
 			this.add(panel3);
 			this.revalidate();
 			this.repaint();
 
 		}
+
+		if (e.getSource() == excluirLivro) {
+			System.out.println("aaaaaaaaaaaaaaaaa");
+				updateBooksByCep();
+				updateMyBooks();
+		}
+
 		if (e.getSource() == suaArea) {
 
 			seuInfo.setBackground(new Color(227, 223, 182));
 			meuLiv.setBackground(new Color(227, 223, 182));
 			suaArea.setBackground(new Color(156, 136, 82));
+			minhasPegas.setBackground(new Color(227, 223, 182));
 			this.getContentPane().remove(panel3);
 			this.getContentPane().remove(panel5);
+			this.getContentPane().remove(panel6);
 			this.add(panel4);
 			this.revalidate();
 			this.repaint();

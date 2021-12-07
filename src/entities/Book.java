@@ -9,12 +9,13 @@ public class Book {
 	private String author;
 	private String sinopse;
 	private String cover;
+	private boolean purchased;
 	private User createdBy;
 	private LocalDateTime dateLauch;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	
-	public Book(String id, String title, String author, String sinopse, String cover, LocalDateTime dateLauch,LocalDateTime createdAt, LocalDateTime updatedAt, User createdBy) {
+	public Book(String id, String title, String author, String sinopse, String cover, LocalDateTime dateLauch, boolean purchased, LocalDateTime createdAt, LocalDateTime updatedAt, User createdBy) {
 		setId(id);
 		setTitle(title);
 		setAuthor(author);
@@ -24,6 +25,7 @@ public class Book {
 		setDateLauch(dateLauch);
 		setCreatedAt(createdAt);
 		setUpdatedAt(updatedAt);
+		setPurchased(purchased);
 	}
 	public String getId() {
 		return id;
@@ -31,6 +33,14 @@ public class Book {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public boolean getPurchased() {
+		return purchased;
+	}
+	
+	public void setPurchased(boolean purchased) {
+		this.purchased = purchased;
 	}
 	
 	public String getTitle() {

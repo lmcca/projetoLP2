@@ -1,5 +1,5 @@
 # Doação de Livros
-Projeto da Disciplica de Programação II da UFPB feito pelas alunas Alessandra Barros, Leticia e Laura.
+Projeto da Disciplica de Programação II da UFPB feito pelas alunas Alessandra Barros, Leticia e Luana.
 
 ### Sobre o projeto
 A ideia do sistema é que os usuários possam colocar livros para doação e também pegar livros que estejam disponíveis, tudo isso de maneira concorrente.

@@ -4,7 +4,7 @@ GO
 CREATE TABLE [dbo].[Purchase](
 	[idP] [uniqueidentifier] NOT NULL,
 	[bookId] [uniqueidentifier] NOT NULL,
-	[purchasedBy] [uniqueidentifier] NOT NULL,
+	[purchasedId] [uniqueidentifier] NOT NULL,
 	[createdAtP] [datetime] NOT NULL,
 	[updatedAtP] [datetime] NULL,
 	

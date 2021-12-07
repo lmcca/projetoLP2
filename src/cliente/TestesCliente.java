@@ -1,4 +1,4 @@
-package servidor;
+package cliente;
 
 public class TestesCliente extends Thread{
 	public void run() {

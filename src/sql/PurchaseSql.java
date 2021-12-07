@@ -26,23 +26,24 @@ public class PurchaseSql implements Serializable{
 		Connection connection = new TesteDB().call(); 
 		String sql = "INSERT INTO [dbo].[Purchase]\r\n"
 				+ "           ([idP]\r\n"
-				+ "           ,[book]\r\n"
-				+ "           ,[purchaseBy]\r\n"
+				+ "           ,[bookId]\r\n"
+				+ "           ,[purchasedId]\r\n"
 				+ "           ,[createdAtP]\r\n"
-				+ "           ,[updatedAtP]\r\n"
+				+ "           ,[updatedAtP])\r\n"
 				+ "     VALUES\r\n"
 				+ "           (?\r\n"
 				+ "           ,?\r\n"
 				+ "           ,?\r\n"
 				+ "           ,?\r\n"
-				+ "           ,null\r\n)";
+				+ "           ,?\r\n)";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
+
 		statement.setObject(1, purchase.getId());
 		statement.setObject(2, purchase.getBook().getId());
-		statement.setObject(6, purchase.getPurchased().getId());
-		statement.setObject(7, Timestamp.valueOf(purchase.getCreatedAt()));
-		statement.setObject(8, null);
+		statement.setObject(3, purchase.getPurchased().getId());
+		statement.setObject(4, Timestamp.valueOf(purchase.getCreatedAt()));
+		statement.setObject(5, null);
 		
 		return !statement.execute();
 	}
@@ -75,8 +76,8 @@ public class PurchaseSql implements Serializable{
 		Connection connection = new TesteDB().call(); 
 		
 		String sql = "SELECT [idP]\r\n"
-				+ "           ,[book]\r\n"
-				+ "           ,[purchased]\r\n"
+				+ "           ,[bookId]\r\n"
+				+ "           ,[purchasedId]\r\n"
 				+ "           ,[createdAtP]\r\n"
 				+ "           ,[updatedAtP]\r\n"
 				+ "  FROM [dbo].[Purchase]\r\n"
@@ -97,7 +98,7 @@ public class PurchaseSql implements Serializable{
 				+ "           ,[purchasedId]\r\n"
 				+ "           ,[createdAtP]\r\n"
 				+ "           ,[updatedAtP]\r\n"
-				+ "  FROM [dbo].[Purchased]\r\n"
+				+ "  FROM [dbo].[Purchase]\r\n"
 				+ "  WHERE purchasedId=?\r\n";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);

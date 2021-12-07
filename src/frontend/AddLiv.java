@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 
 import controllers.BookController;
 import entities.User;
-import models.BookModel;
 
 public class AddLiv extends JFrame implements ActionListener{
 	private BookController bookController;

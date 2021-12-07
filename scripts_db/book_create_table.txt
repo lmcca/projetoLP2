@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[Book](
 	[sinopse] [nvarchar](max) NULL,
 	[cover] [nvarchar](max) NULL,
 	[lauchAt] [datetime] NULL,
+	[purchased] [nvarchar](max) NULL,
 	[createdAtB] [datetime] NOT NULL,
 	[updatedAtB] [datetime] NULL,
 	[createdBy] [uniqueidentifier] NOT NULL,
