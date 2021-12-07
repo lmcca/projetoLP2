@@ -2,10 +2,10 @@ USE [DoacaoDeLivros]
 GO
 
 CREATE TABLE [dbo].[Purchase](
-	[id] [uniqueidentifier] NOT NULL,
+	[idP] [uniqueidentifier] NOT NULL,
 	[bookId] [uniqueidentifier] NOT NULL,
 	[purchasedBy] [uniqueidentifier] NOT NULL,
-	[createdAt] [datetime] NOT NULL,
-	[updatedAt] [datetime] NULL,
+	[createdAtP] [datetime] NOT NULL,
+	[updatedAtP] [datetime] NULL,
 	
 )ON [PRIMARY];

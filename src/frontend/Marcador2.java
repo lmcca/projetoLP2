@@ -6,31 +6,37 @@ import javax.swing.*;
 import javax.swing.JButton;
 
 import models.BookModel;
+import models.PurchaseModel;
+import models.UserModel;
 
 import java.awt.Font;
 
-
-
-public class Marcador2 extends JPanel implements MouseListener{
-    /**
+public class Marcador2 extends JPanel implements MouseListener {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private BookModel bookModel;
-	JPanel login = new JPanel(); 
-    JLabel lab = new JLabel("Login");
-    JLabel lvlog = new JLabel();
-    ImageIcon livroLogin = new ImageIcon("livroLogin.png");
-    JButton butcria;
-    JButton butlog;
-	
-	Marcador2(BookModel bookModel){
+	private UserModel userModel;
+	private PurchaseModel purchaseModel;
+
+	JPanel login = new JPanel();
+	JLabel lab = new JLabel("Login");
+	JLabel lvlog = new JLabel();
+	ImageIcon livroLogin = new ImageIcon("livroLogin.png");
+	JButton butcria;
+	JButton butlog;
+
+	Marcador2(BookModel bookModel, UserModel userModel, PurchaseModel purchaseModel) {
+		this.purchaseModel = purchaseModel;
 		this.bookModel = bookModel;
+		this.userModel = userModel;
+
 		this.addMouseListener(this);
 		lab.setVerticalTextPosition(JLabel.TOP);
-		lab.setHorizontalTextPosition(JLabel.CENTER); 
+		lab.setHorizontalTextPosition(JLabel.CENTER);
 		lab.setForeground(Color.black);
-		lab.setFont(new Font("Serif", Font.PLAIN,20));
+		lab.setFont(new Font("Serif", Font.PLAIN, 20));
 		lab.setBounds(0, 0, 50, 40);
 		this.add(lab);
 		this.setBounds(340, 110, 50, 40);
@@ -43,16 +49,15 @@ public class Marcador2 extends JPanel implements MouseListener{
 		login.add(lvlog);
 		login.setVisible(false);
 		login.setBackground(new Color(227, 223, 182));
-		
-		
-		
+
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// Invoked when the mouse button has been clicked (pressed and released) on a component
-		//System.out.println("You clicked the mouse");
-		new Login(bookModel); 
+		// Invoked when the mouse button has been clicked (pressed and released) on a
+		// component
+		// System.out.println("You clicked the mouse");
+		new Login(userModel, bookModel, purchaseModel);
 	}
 
 	@Override
@@ -65,7 +70,6 @@ public class Marcador2 extends JPanel implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		// Invoked when a mouse button has been released on a component
 
-	
 	}
 
 	@Override
@@ -78,10 +82,9 @@ public class Marcador2 extends JPanel implements MouseListener{
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// Invoked when the mouse exits a component
-		
-	    this.setBackground(new Color(247, 247, 7));
-	    this.setBounds(340, 110, 50, 40);
-	}
 
+		this.setBackground(new Color(247, 247, 7));
+		this.setBounds(340, 110, 50, 40);
+	}
 
 }

@@ -25,11 +25,11 @@ public class PurchaseSql implements Serializable{
 	public boolean createPurchase(Purchase purchase) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Connection connection = new TesteDB().call(); 
 		String sql = "INSERT INTO [dbo].[Purchase]\r\n"
-				+ "           ([id]\r\n"
+				+ "           ([idP]\r\n"
 				+ "           ,[book]\r\n"
 				+ "           ,[purchaseBy]\r\n"
-				+ "           ,[createdAt]\r\n"
-				+ "           ,[updatedAt]\r\n"
+				+ "           ,[createdAtP]\r\n"
+				+ "           ,[updatedAtP]\r\n"
 				+ "     VALUES\r\n"
 				+ "           (?\r\n"
 				+ "           ,?\r\n"
@@ -74,13 +74,13 @@ public class PurchaseSql implements Serializable{
 	public Purchase getPurchaseById(String purchaseId) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Connection connection = new TesteDB().call(); 
 		
-		String sql = "SELECT [id]\r\n"
+		String sql = "SELECT [idP]\r\n"
 				+ "           ,[book]\r\n"
 				+ "           ,[purchased]\r\n"
-				+ "           ,[createdAt]\r\n"
-				+ "           ,[updatedAt]\r\n"
+				+ "           ,[createdAtP]\r\n"
+				+ "           ,[updatedAtP]\r\n"
 				+ "  FROM [dbo].[Purchase]\r\n"
-				+ "  WHERE id=?";
+				+ "  WHERE idP=?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, purchaseId);
@@ -92,11 +92,11 @@ public class PurchaseSql implements Serializable{
 		Connection connection = new TesteDB().call(); 
 		
 		ArrayList<Purchase> purchases = new ArrayList<Purchase>();
-		String sql = "SELECT [id]\r\n"
+		String sql = "SELECT [idP]\r\n"
 				+ "           ,[bookId]\r\n"
 				+ "           ,[purchasedId]\r\n"
-				+ "           ,[createdAt]\r\n"
-				+ "           ,[updatedAt]\r\n"
+				+ "           ,[createdAtP]\r\n"
+				+ "           ,[updatedAtP]\r\n"
 				+ "  FROM [dbo].[Purchased]\r\n"
 				+ "  WHERE purchasedId=?\r\n";
 		
@@ -121,7 +121,7 @@ public class PurchaseSql implements Serializable{
 		Connection connection = new TesteDB().call(); 
 		
 		String sql = "DELETE FROM [dbo].[Purchase]\r\n"
-				+ "WHERE id=?";
+				+ "WHERE idP=?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setObject(1, id);

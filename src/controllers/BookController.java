@@ -17,11 +17,7 @@ public class BookController {
 	
 	public ArrayList<Book> getBooks() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
 		ArrayList<Book> books = new ArrayList<Book>();
-		
 		books = bookModel.getAllBooks();
-		System.out.println("aaaaaaaaaaah saiaa");
-
-		
 		return books;
 	}
 	
@@ -35,6 +31,14 @@ public class BookController {
 	
 	public ArrayList<Book> getBooksByTitle(String title) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		return bookModel.getBooksByTitle(title);
+	}
+
+	public ArrayList<Book> getBooksByUser(String userId) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		return bookModel.getBooksByUser(userId);
+	}
+
+	public ArrayList<Book> getBooksByCep(String cep) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		return bookModel.getBooksByCep(cep);
 	}
 	
 	public void updateBook(Book book) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {

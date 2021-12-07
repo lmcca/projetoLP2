@@ -1,163 +1,157 @@
 package frontend;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.BorderLayout;
-import javax.swing.JTextField;
-
-import controllers.BookController;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import java.awt.Color;
+import javax.swing.JLabel;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.awt.FlowLayout;
+import javax.swing.JTextField;
+import controllers.UserController;
+import entities.User;
 import models.BookModel;
+import models.PurchaseModel;
+import models.UserModel;
 
-public class Login extends JFrame implements ActionListener{
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 
-	      /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-		JTextField pesquisa;
-	      JButton seuInfo;
-	      JButton meuLiv;
-	      JButton suaArea;
-	private BookController bookController;
+public class Login implements ActionListener {
+	private UserController userController;
+	private BookModel bookModel;
+	private PurchaseModel purchaseModel;
 
-          Login(BookModel bookModel){
-        	  this.bookController = new BookController(bookModel);
+	JLabel Npossui, usual, userlab, senhalab, maillab, ceplab, normu, norms;
+	JTextField novUser, novSenha, novMail, novCEP, nLog, nSen;
+	JFrame telalog;
+	JPanel criaLog, normLog;
+	JButton subCria, sublog;
 
-        	  ImageIcon logo = new ImageIcon("logo.png");
-        	  ImageIcon pesIcon =  new ImageIcon("searchIcon.png");
-        	  
-        	  JLabel user = new JLabel();
-        	  user.setText("   Nome");
-        	  user.setFont(new Font("Serif",Font.PLAIN,12));
+	Login(UserModel userModel, BookModel bookModel, PurchaseModel purchaseModel) {
+		this.userController = new UserController(userModel);
+		this.purchaseModel = purchaseModel;
+		this.bookModel = bookModel;
 
-        	  JLabel search = new JLabel();
-        	  search.setIcon(pesIcon);
-        	  search.setOpaque(true); 
-        	  
-        	  seuInfo = new JButton();
-        	  seuInfo.setText("Meus Dados");
-        	  seuInfo.setFont(new Font("Serif",Font.PLAIN,12));
-        	  seuInfo.setBounds(0, 0, 100, 50);
-      		  seuInfo.addActionListener(this);
-      		  seuInfo.setFocusable(false);
-      		  seuInfo.setBackground(new Color(227, 223, 182));
-      		
-        	  
-        	  meuLiv = new JButton();
-        	  meuLiv.setText("Meus Livros");
-        	  meuLiv.setFont(new Font("Serif",Font.PLAIN,12));
-        	  meuLiv.setBounds(0, 0, 100, 50);
-      		  meuLiv.addActionListener(this);
-      		  meuLiv.setFocusable(false);
-      		  meuLiv.setBackground(new Color(227, 223, 182));
-      	
-      		  
-      		  suaArea = new JButton();
-      	      suaArea.setText("Livros na Minha Regi�o");
-      	      suaArea.setFont(new Font("Serif",Font.PLAIN,12));
-      	      suaArea.setBounds(0, 0, 100, 50);
-    		  suaArea.addActionListener(this);
-    		  suaArea.setFocusable(false);
-    		  suaArea.setBackground(new Color(227, 223, 182));
-        	 
-    		  
-        	  pesquisa = new JTextField();
-      	      pesquisa.setPreferredSize(new Dimension(100,40));
-      	      pesquisa.setFont(new Font("Consolas",Font.PLAIN,12));
-      	      pesquisa.setForeground(Color.BLACK);
-      	      pesquisa.setBackground(Color.white);
-      	      pesquisa.setCaretColor(Color.black);
-      	      pesquisa.setText("Pesquise");
-      	      
-      	      JPanel sub11= new JPanel();
-      	      sub11.setLayout(new BorderLayout());
-      	      sub11.add(search,BorderLayout.WEST);
-      	      sub11.add(pesquisa,BorderLayout.EAST);
-        	  
-        	  
-        	  JPanel panel1 = new JPanel();
-        	  panel1.setLayout(new BorderLayout());
-        	  panel1.setBackground(new Color(227, 223, 182));
-        	  panel1.setPreferredSize(new Dimension(200,50));
-        	  panel1.add(sub11,BorderLayout.EAST);
-        	  panel1.add(user,BorderLayout.WEST);
-        	  
-      	      JPanel panel2 = new JPanel();
-      	      panel2.setLayout(new GridLayout(5,1));
-      	      panel2.setBackground(new Color(227, 223, 182));
-      	      panel2.setPreferredSize(new Dimension(150,100));
-      	      panel2.add(seuInfo);
-      	      panel2.add(suaArea);
-      	      panel2.add(meuLiv);
-      	      
-      	      JPanel panel5 = new JPanel();
-      		        	  
+		// labels
+		Npossui = new JLabel(" N�o possui uma conta?Crie J�!");
+		Npossui.setFont(new Font("Serif", Font.PLAIN, 20));
+		usual = new JLabel(" Tem uma conta? Fa�a seu login:");
+		usual.setFont(new Font("Serif", Font.PLAIN, 20));
+		userlab = new JLabel(" Digite o nome de usu�rio:");
+		senhalab = new JLabel(" Digite a sua senha:");
+		maillab = new JLabel(" Digite o seu email: ");
+		ceplab = new JLabel(" Digite o seu CEP: ");
+		normu = new JLabel(" Digite o nome de usu�rio:");
+		norms = new JLabel(" Digite a sua senha:");
 
-      	      panel5.setBackground(Color.blue);		
-      	      
-      		  panel5.setPreferredSize(new Dimension(100,100));
-    
-              
-              this.setIconImage(logo.getImage());
-              this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-              this.setSize(600,500);
-              this.setTitle("Login");
-              this.getContentPane().setBackground(new Color(227, 223, 182)); 
-             
-              this.add(panel1,BorderLayout.NORTH);
-      		  this.add(panel2,BorderLayout.WEST);
-      		  this.add(panel5,BorderLayout.CENTER);
-      		  
-      		  this.setVisible(true);
-              
-              
-        	  
-          }
+		// textfields
+		novUser = new JTextField();
+		novUser.setPreferredSize(new Dimension(140, 30));
+		novUser.setFont(new Font("Serif", Font.PLAIN, 12));
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+		novSenha = new JTextField();
+		novSenha.setPreferredSize(new Dimension(150, 30));
+		novSenha.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		novMail = new JTextField();
+		novMail.setPreferredSize(new Dimension(150, 30));
+		novMail.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		novCEP = new JTextField();
+		novCEP.setPreferredSize(new Dimension(150, 30));
+		novCEP.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		nLog = new JTextField();
+		nLog.setPreferredSize(new Dimension(150, 30));
+		nLog.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		nSen = new JTextField();
+		nSen.setPreferredSize(new Dimension(150, 30));
+		nSen.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		// butoes
+		subCria = new JButton();
+		subCria.addActionListener(this);
+		subCria.setPreferredSize(new Dimension(70, 30));
+		subCria.setText("Submit");
+		subCria.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		sublog = new JButton();
+		sublog.addActionListener(this);
+		sublog.setPreferredSize(new Dimension(70, 30));
+		sublog.setText("Submit");
+		sublog.setFont(new Font("Serif", Font.PLAIN, 12));
+
+		// paineis
+		criaLog = new JPanel();
+		criaLog.setLayout(new FlowLayout(FlowLayout.LEFT, 1, 5));
+		criaLog.setBackground(new Color(199, 180, 129));
+		criaLog.setPreferredSize(new Dimension(300, 500));
+		criaLog.add(Npossui);
+		criaLog.add(userlab);
+		criaLog.add(novUser);
+		criaLog.add(senhalab);
+		criaLog.add(novSenha);
+		criaLog.add(maillab);
+		criaLog.add(novMail);
+		criaLog.add(ceplab);
+		criaLog.add(novCEP);
+		criaLog.add(subCria);
+
+		normLog = new JPanel();
+		normLog.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 5));
+		normLog.add(usual);
+		normLog.add(normu);
+		normLog.add(nLog);
+		normLog.add(norms);
+		normLog.add(nSen);
+		normLog.add(sublog);
+		normLog.setBackground(new Color(227, 223, 182));
+		normLog.setPreferredSize(new Dimension(285, 500));
+
+		// frame
+		telalog = new JFrame();
+
+		telalog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		telalog.setLayout(new BorderLayout());
+		telalog.setSize(600, 300);
+		telalog.add(criaLog, BorderLayout.WEST);
+		telalog.add(normLog, BorderLayout.EAST);
+		telalog.setResizable(false);
+		telalog.getContentPane().setBackground(Color.black);
+		telalog.setTitle("Login");
+		telalog.setVisible(true);
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == subCria) {
 			try {
-				bookController.getBooks();
+				User user = userController.createUser(novMail.getText(), novUser.getText(), novSenha.getText(),
+						novCEP.getText());
+				System.out.println("user criado");
+				new Home(bookModel, user, purchaseModel);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			if(e.getSource()==seuInfo) {
-				suaArea.setBackground(new Color(227, 223, 182));
-				meuLiv.setBackground(new Color(227, 223, 182));
-				seuInfo.setBackground(new Color(156, 136, 82));
-	
-			}	
-			if(e.getSource()==meuLiv) {
-				
-				suaArea.setBackground(new Color(227, 223, 182));
-				seuInfo.setBackground(new Color(227, 223, 182));
-				meuLiv.setBackground(new Color(156, 136, 82));
-				
-			}
-			if(e.getSource()==suaArea) {
-				
-				seuInfo.setBackground(new Color(227, 223, 182));
-				meuLiv.setBackground(new Color(227, 223, 182));
-				suaArea.setBackground(new Color(156, 136, 82));
-			
-			}
-			
 		}
-		
-		
+		if (e.getSource() == sublog) {
+			try {
+				User user = userController.getUserByEmail(nLog.getText());
+				System.out.println("user encontrado");
+				new Home(bookModel, user, purchaseModel);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+	}
 
 }
-
