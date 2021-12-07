@@ -8,7 +8,7 @@ import java.awt.BorderLayout;
 import javax.swing.JTextField;
 
 import controllers.BookController;
-import java.awt.FlowLayout;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -34,6 +34,7 @@ public class Login extends JFrame implements ActionListener{
 	      JButton seuInfo;
 	      JButton meuLiv;
 	      JButton suaArea;
+	      JButton criaLivro;
 	      JPanel sub512;
 	private BookController bookController;
 
@@ -65,6 +66,13 @@ public class Login extends JFrame implements ActionListener{
         	  dadosLoc.setText( "Localizacão:"+"Local");
         	  dadosLoc.setFont(new Font("Serif",Font.PLAIN,30));
         	  
+        	  criaLivro= new JButton();
+        	  criaLivro.setText("Adicionar livro");
+        	  criaLivro.addActionListener(this);
+        	  criaLivro.setFont(new Font("Serif",Font.PLAIN,20));
+        	  criaLivro.setFocusable(false);
+        	  criaLivro.setBounds(0, 0, 40, 50);
+        	  
         	  seuInfo = new JButton();
         	  seuInfo.setText("Meus Dados");
         	  seuInfo.setFont(new Font("Serif",Font.PLAIN,20));
@@ -84,8 +92,8 @@ public class Login extends JFrame implements ActionListener{
       	
       		  
       		  suaArea = new JButton();
-      	      suaArea.setText("Livros na Minha Regi�o");
-      	      suaArea.setFont(new Font("Serif",Font.PLAIN,12));
+      	      suaArea.setText("Livros na Minha Regiao");
+      	      suaArea.setFont(new Font("Serif",Font.PLAIN,10));
       	      suaArea.setBounds(0, 0, 100, 50);
     		  suaArea.addActionListener(this);
     		  suaArea.setFocusable(false);
@@ -143,14 +151,21 @@ public class Login extends JFrame implements ActionListener{
       	      panel2.add(meuLiv);
       	      
       	      panel3 = new JPanel();
-    		  panel3.setLayout(new GridLayout(3,2));
+    		  panel3.setLayout(new GridLayout(3,2,5,5));
   	          panel3.setBackground(new Color(0, 168, 150));		      	      
   		      panel3.setPreferredSize(new Dimension(100,100));
+  		      panel3.add(new Livro());
+  		      panel3.add(new Livro());
+  		      panel3.add(criaLivro);
   		  
   		      panel4 = new JPanel();
-		      panel4.setLayout(new GridLayout(3,2));
+		      panel4.setLayout(new GridLayout(3,2,5,5));
 	          panel4.setBackground(new Color(0, 168, 150));		      	      
 		      panel4.setPreferredSize(new Dimension(100,100));
+		      panel4.add(new Livro());
+  		      panel4.add(new Livro());
+  		      panel4.add(new Livro());
+		      panel4.add(new Livro());
       	      
       	      panel5 = new JPanel();
       	      panel5.setBackground(new Color(0, 168, 150));		      	      
@@ -187,15 +202,24 @@ public class Login extends JFrame implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}*/
+			if(e.getSource()==criaLivro) {
+				 new AddLiv();
+				
+				
+
+				this.revalidate();
+				this.repaint();
+			}	
 			
 			if(e.getSource()==seuInfo) {
 				suaArea.setBackground(new Color(227, 223, 182));
 				meuLiv.setBackground(new Color(227, 223, 182));
 				seuInfo.setBackground(new Color(156, 136, 82));
+				this.getContentPane().remove(panel3);
+				this.getContentPane().remove(panel4);
 				this.add(panel5);
 				this.revalidate();
 				this.repaint();
-	
 			}	
 			if(e.getSource()==meuLiv) {
 				
@@ -203,6 +227,8 @@ public class Login extends JFrame implements ActionListener{
 				seuInfo.setBackground(new Color(227, 223, 182));
 				meuLiv.setBackground(new Color(156, 136, 82));
 				this.getContentPane().remove(panel5);
+				this.getContentPane().remove(panel4);
+				this.add(panel3);
 				this.revalidate();
 				this.repaint();
 				
@@ -215,7 +241,9 @@ public class Login extends JFrame implements ActionListener{
 				seuInfo.setBackground(new Color(227, 223, 182));
 				meuLiv.setBackground(new Color(227, 223, 182));
 				suaArea.setBackground(new Color(156, 136, 82));
+				this.getContentPane().remove(panel3);
 				this.getContentPane().remove(panel5);
+				this.add(panel4);
 				this.revalidate();
 				this.repaint();
 				
