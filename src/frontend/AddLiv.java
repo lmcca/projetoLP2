@@ -67,7 +67,6 @@ public class AddLiv extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource()==adicionar) {
 			try {
 				bookController.createBook(titulotex.getText(), autortex.getText(), sinopsetex.getText(),null,null, this.user);

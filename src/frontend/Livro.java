@@ -3,20 +3,17 @@ package frontend;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.Objects;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 
 import controllers.BookController;
 import controllers.PurchaseController;
-import entities.Book;
 import entities.User;
+import threads.ExcluirLivro;
+import threads.PegarLivro;
 
 public class Livro extends JPanel implements ActionListener {
 	JLabel titulo, sinopse, autor, cep, contato;
@@ -77,42 +74,13 @@ public class Livro extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == excluirLivro) {
-			try {
-				this.bookController.deleteBook(bookId);
-				JOptionPane.showMessageDialog(null, "Livro foi excluido com sucesso!");
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
-				JOptionPane.showMessageDialog(null, "Ops, esse livro foi excluido, atualize sua tela!");
-			}
+			ExcluirLivro excluir = new ExcluirLivro(bookId, bookController);
+			excluir.start();
 		}
 
 		if (e.getSource() == pegarLivro) {
-			try {
-				Book book = this.bookController.getBookById(bookId);
-				
-				
-				if(Objects.isNull(book)){
-					JOptionPane.showMessageDialog(null, "Ops, esse livro foi excluido, atualize sua tela!");
-				}else{
-					System.out.println("aaaaaaaaaaa");
-					try{
-						if(book.getPurchased()){
-							JOptionPane.showMessageDialog(null, "Ops, esse livro ja foi pego, atualize sua tela!");
-						}else{
-							book.setPurchased(true);
-							book.setUpdatedAt(LocalDateTime.now());
-							bookController.updateBook(book);
-							this.purchaseController.createPurchase(book, user);
-						}
-					}catch(NullPointerException e2){
-						JOptionPane.showMessageDialog(null, "Ops, esse livro foi excluido, atualize sua tela!");
-					}
-						
-				}
-				
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
-				e1.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Ops, esse livro foi excluido, atualize sua tela!");
-			}
+			PegarLivro pegarLivro = new PegarLivro(user, bookController, purchaseController, bookId);
+			pegarLivro.start();
 		}
 		
 	}

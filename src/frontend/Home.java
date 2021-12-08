@@ -320,7 +320,6 @@ public class Home extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == excluirLivro) {
-			System.out.println("aaaaaaaaaaaaaaaaa");
 				updateBooksByCep();
 				updateMyBooks();
 		}

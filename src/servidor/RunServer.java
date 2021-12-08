@@ -1,7 +1,7 @@
-package cliente;
+package servidor;
 
-public class RunClient {
-    static ThreadCliente testeServer = new ThreadCliente();
+public class RunServer {
+    static ThreadServer testeServer = new ThreadServer();
 
     public static void main(String[] args) {
 		try {
